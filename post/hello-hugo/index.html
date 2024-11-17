@@ -3,12 +3,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title> - Hello Hugo </title>
+    <title> - I2C Protocol Presentation </title>
     
     
     <meta content="" name="keywords">
     
-    <meta content=" - Test 1 Test 2 for (int i=0;i&lt;100;i&#43;&#43;&gt;) { print(&#34;%d&#34;,i); } " name="description">
+    <meta content=" - I2C Intoduction I2C Inter-Integrated Circuit I²C（Inter-Integrated Circuit）是一種由飛利浦半導體（現為恩智浦半導體 NXP Semiconductors）於1982 年發布的串行通訊協議。I²C協議的主要制定者是飛利浦，目前則由恩智浦負責維護。該協議最初設計的目的是讓微控制器（MCU）可以簡單且低成本地與其他元件（如傳感器、顯示器和存儲設備等）進行通信。
+I²C 使用兩條信號線——數據線（SDA）和時鐘線（SCL）來傳輸數據，具有同步且雙向的特性。I²C 可以支持多個主設備與從設備之間的通訊，因此適用於多數嵌入式系統和消費性電子產品中，特別是在需要多元件之間低速通訊的場景。I2C 用於各種控制架構，例如係統管理匯流排（SMBus）、電源管理匯流排 (PMBus)、智慧型平台管理介面 (IPMI)、顯示器資料通道 (DDC) 和高階電信運算架構 (ATCA)
+Test 2 Agenda  Introduction to I2C Protocol I2C Protocol Overview (Version 2.0) I2C Physical Layer Master-Slaver Architecture Addressing Scheme Data Transfer Format Transmission Speeds Start and Stop Condition Repeated Start Condition Acknowledgement Mechanism (ACK/NACK)   Clocl Stretching   " name="description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     
@@ -91,7 +93,7 @@ layui.use('element', function(){
             <div class="layui-card single-card">
                 <br />
                 <blockquote class="self-elem-quote  markdown-body single-title" >
-                    <h1>Hello Hugo</h1>
+                    <h1>I2C Protocol Presentation</h1>
                     <h3 style="margin-top:10px; margin-bottom:10px"> 
     <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
     <span>2024-07-24</span>
@@ -109,15 +111,31 @@ layui.use('element', function(){
 
                 </blockquote>
                 <div class="layui-card-body markdown-body single-content">
-                    <h1 id="test-1">Test 1</h1>
+                    <h1 id="i2c-intoduction">I2C Intoduction</h1>
+<h2 id="i2c-inter-integrated-circuit">I2C Inter-Integrated Circuit</h2>
+<p>I²C（Inter-Integrated Circuit）是一種由飛利浦半導體（現為恩智浦半導體 NXP Semiconductors）於1982 年發布的串行通訊協議。I²C協議的主要制定者是飛利浦，目前則由恩智浦負責維護。該協議最初設計的目的是讓微控制器（MCU）可以簡單且低成本地與其他元件（如傳感器、顯示器和存儲設備等）進行通信。</p>
+<p>I²C 使用兩條信號線——數據線（SDA）和時鐘線（SCL）來傳輸數據，具有同步且雙向的特性。I²C 可以支持多個主設備與從設備之間的通訊，因此適用於多數嵌入式系統和消費性電子產品中，特別是在需要多元件之間低速通訊的場景。I2C 用於各種控制架構，例如係統管理匯流排（SMBus）、電源管理匯流排 (PMBus)、智慧型平台管理介面 (IPMI)、顯示器資料通道 (DDC) 和高階電信運算架構 (ATCA)</p>
+<p><img src="/images/figure_1.png" alt="I2C release"></p>
 <h1 id="test--2">Test  2</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">
-<span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;i<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">100</span>;i<span style="color:#f92672">++&gt;</span>)
-{
-    print(<span style="color:#e6db74">&#34;%d&#34;</span>,i);
-}
-
-</code></pre></div></div>
+<h1 id="agenda">Agenda</h1>
+<ol>
+<li>Introduction to I2C Protocol</li>
+<li>I2C Protocol Overview (Version 2.0)</li>
+<li>I2C Physical Layer</li>
+<li>Master-Slaver Architecture</li>
+<li>Addressing Scheme</li>
+<li>Data Transfer Format</li>
+<li>Transmission Speeds</li>
+<li>Start and Stop Condition</li>
+<li>Repeated Start Condition</li>
+<li>Acknowledgement Mechanism (ACK/NACK)</li>
+</ol>
+<hr>
+<ol start="11">
+<li>Clocl Stretching</li>
+<li></li>
+</ol>
+</div>
             </div>
         </div>
 
@@ -165,8 +183,31 @@ layui.use('element', function(){
                 
                 <div style="margin-left: 10px;">
                     <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/i2c_protocol/">
+                        <h3 class="">I2C Protocol Presentation</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-07-24</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
                     <a href="/post/hello-hugo/">
-                        <h3 class="">Hello Hugo</h3>
+                        <h3 class="">I2C Protocol Presentation</h3>
                     </a>
                     <h3 style="margin-top:10px; margin-bottom:10px"> 
     <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>

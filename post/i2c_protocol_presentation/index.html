@@ -1,0 +1,588 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> - I2C Protocol Presentation </title>
+    
+    
+    <meta content="" name="keywords">
+    
+    <meta content=" - AGENDA  I2C 協定介紹 基於2.1版本的 I2C 協定概述  Transmission Speeds I2C 實體層 主從架構 Master-Slave Architecture 位元傳輸 傳輸資料 TRANSFERRING DATA  START 與 STOP 條件 (START Condition &amp; STOP Condition)  Repeated START 條件   Byte format Acknowledge (ACK) and Not Acknowledge (NACK)   尋址 Addressing Scheme  7-bit Addressing First Byte  　結構與功能，並搭配時序圖展示其在通信中的作用。
+  10-bit Addressing   Acknowledgement Mechanism (ACK/NACK) Arbitration and Synchronization Multi-Master Configuration Error Detection and Handling   I2C Protocol Challenges and Limitations I2C vs Other Communication Protocols (SPI/UART)  I2C 協定介紹 I²C（Inter-Integrated Circuit）是一種由飛利浦半導體（現為恩智浦半導體 NXP Semiconductors）於1982 年發布的串行通訊協議。I²C協議的主要制定者是飛利浦，目前則由恩智浦負責維護。該協議最初設計的目的是讓微控制器（MCU）可以簡單且低成本地與其他元件（如傳感器、顯示器和存儲設備等）進行通信。" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    
+
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/self/css/default.css">
+    <script src=" /layui/layui.js"></script>
+
+    <link rel="stylesheet" async href="/self/css/markdown.min.css">
+    <link rel="stylesheet" async href="/self/css/gallery.css">
+    
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+    <script async src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys=" crossorigin="anonymous"></script></head>
+
+<body>
+    
+    <header class="layui-header layui-bg-cyan">
+
+    
+    
+    <a class="nav-self-logo" href="/">
+        
+    </a>
+
+    <ul class="layui-nav layui-layout-right layui-bg-cyan" lay-filter="">
+        
+        
+        <li class="layui-nav-item" id="nav_big"><a href="/post/">Posts</a></li>
+        
+
+        
+            
+                <li class="layui-nav-item" id="nav_big"><a href="/post/"></a></li>
+            
+        
+
+        
+        <li class="layui-nav-item" id="nav_small">
+            <a href="javascript:;">
+                <i class="layui-icon layui-icon-app" style="font-size: 24px;"></i>
+            </a>
+
+            <dl class="layui-nav-child">
+                
+                <dd><a href="/post/">Posts</a></dd>
+                
+
+                
+                    
+                        <dd><a href="/post/"></a></dd>
+                    
+                
+            </dl>
+        </li>
+    </ul>
+</header>
+
+<script>
+layui.use('element', function(){
+  var element = layui.element;
+});
+</script>
+
+        <div id="content" style="min-height:80%">
+<div class="layui-container" style="margin-bottom: 10px">
+    
+
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md8 layui-col-sm12 layui-col-xs12">
+            <div class="layui-card single-card">
+                <br />
+                <blockquote class="self-elem-quote  markdown-body single-title" >
+                    <h1>I2C Protocol Presentation</h1>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                </blockquote>
+                <div class="layui-card-body markdown-body single-content">
+                    <h1 id="agenda">AGENDA</h1>
+<ol>
+<li>I2C 協定介紹</li>
+<li>基於2.1版本的 I2C 協定概述
+<ul>
+<li>Transmission Speeds</li>
+<li>I2C 實體層</li>
+<li>主從架構 Master-Slave Architecture</li>
+<li>位元傳輸</li>
+<li>傳輸資料 TRANSFERRING DATA
+<ul>
+<li>START 與 STOP 條件 (START Condition &amp; STOP Condition)
+<ul>
+<li>Repeated START 條件</li>
+</ul>
+</li>
+<li>Byte format</li>
+<li>Acknowledge (ACK) and Not Acknowledge (NACK)</li>
+</ul>
+</li>
+<li>尋址 Addressing Scheme
+<ul>
+<li>7-bit Addressing</li>
+<li>First Byte
+<blockquote>
+<p>　結構與功能，並搭配時序圖展示其在通信中的作用。</p>
+</blockquote>
+</li>
+<li>10-bit Addressing</li>
+</ul>
+</li>
+<li>Acknowledgement Mechanism (ACK/NACK)</li>
+<li>Arbitration and Synchronization</li>
+<li>Multi-Master Configuration</li>
+<li>Error Detection and Handling</li>
+</ul>
+</li>
+<li>I2C Protocol Challenges and Limitations</li>
+<li>I2C vs Other Communication Protocols (SPI/UART)</li>
+</ol>
+<h1 id="i2c-協定介紹">I2C 協定介紹</h1>
+<p>I²C（Inter-Integrated Circuit）是一種由飛利浦半導體（現為恩智浦半導體 NXP Semiconductors）於1982 年發布的串行通訊協議。I²C協議的主要制定者是飛利浦，目前則由恩智浦負責維護。該協議最初設計的目的是讓微控制器（MCU）可以簡單且低成本地與其他元件（如傳感器、顯示器和存儲設備等）進行通信。</p>
+<p>I²C 使用兩條信號線——數據線（SDA）和時鐘線（SCL）來傳輸數據，具有同步且雙向的特性。I²C 可以支持多個主設備與從設備之間的通訊，因此適用於多數嵌入式系統和消費性電子產品中，特別是在需要多元件之間低速通訊的場景。I2C 用於各種控制架構，例如係統管理匯流排（SMBus）、電源管理匯流排 (PMBus)、智慧型平台管理介面 (IPMI)、顯示器資料通道 (DDC) 和高階電信運算架構 (ATCA)</p>
+<h2 id="i2c-版本演進">I2C 版本演進</h2>
+<p><img src="/images/figure_1.png" alt="I2C Version History"></p>
+<table>
+    <tr>
+        <td>Version</td>
+        <td>主要重點</td>
+    </tr>
+    <tr>
+        <td>First</td>
+        <td>The 1st version of I2C protocol。</td>
+    </tr>
+    <tr>
+        <td>1.0</td>
+        <td>
+        <li>100kHz 以下的模式, 統一稱為<b>標準模式</b> 。</li>
+        <li>新增<b>快速模式</b> 400kHz, 並兼容標準模式。</li>
+        </td>
+    </tr>
+        <tr>
+        <td>2.0</td>
+        <td>新增<b>高速模式</b> 3.4MHz. 兼容標準模式. <b>10位地址首次被提及</b>。</td>
+    </tr>
+    </tr>
+        <tr>
+        <td>2.1</td>
+        <td>
+        <li>繼續支援7位元和10位元位址，並詳細規定了位址分配和衝突解決的機制。</li>
+        <li>增加了一些擴展特性，如主機和從機之間更靈活的握手和應答機制，以適應不同的應用需求。</li>
+        <li>對不同功能的設備進行了更詳細的描述，幫助開發人員更好地理解和實現I²C協議。</li>
+        </td>
+    </tr>
+    </tr>
+        <tr>
+        <td>3.0</td>
+        <td>
+        <li><b>快速模式+</b> 1MHz。</li>
+        <li>此版開始由 NXP 發布。</li>
+        </td>
+    </tr>
+    </tr>
+        <tr>
+        <td>4.0</td>
+        <td>
+            <li><b>Ultra Fast-mode</b> 5MHz, 以及相關的 USDA, USCL 介紹，不使用 I²C 標準的雙向線路，僅限於單向資料傳輸，適用於一些特別高需求的資料傳輸應用。</li>
+            <li>Display Data Channel DDC 介紹。</li>
+        </td>
+    </tr>
+    </tr>
+        <tr>
+        <td>5.0</td>
+        <td>Version 4.0 修改</td>
+    </tr>
+    </tr>
+        <tr>
+        <td>6.0</td>
+        <td>更新了規格和部分細節，改進了對高速訊號的支持，增強了訊號完整性，以適應日益複雜的嵌入式系統需求</td>
+    </tr>
+    </tr>
+        <tr>
+        <td>7.0</td>
+        <td><b>MIPI I3C</b></td>
+    </tr>
+</table>
+<h1 id="基於21版本的-i2c-協定概述">基於2.1版本的 I2C 協定概述</h1>
+<h2 id="i2c-傳送速率">I2C 傳送速率</h2>
+<table>
+<thead>
+<tr>
+<th>速率模式</th>
+<th>傳輸速率</th>
+<th>應用範圍</th>
+<th>特點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>標準模式</strong></td>
+<td>100 kbps</td>
+<td>低速嵌入式系統，低功耗設備</td>
+<td>穩定、功耗低</td>
+</tr>
+<tr>
+<td><strong>快速模式</strong></td>
+<td>400 kbps</td>
+<td>顯示器、傳感器等中等帶寬需求</td>
+<td>較高的數據速率，穩定性良好</td>
+</tr>
+<tr>
+<td><strong>超快速模式</strong></td>
+<td>3.4 Mbps</td>
+<td>音頻/視頻設備，高性能設備</td>
+<td>高數據速率，距離受限</td>
+</tr>
+<tr>
+<td><strong>快速模式+</strong> (Ver 3.0)</td>
+<td>1 Mbps</td>
+<td>工業控制、高效能傳感器</td>
+<td>高速傳輸，穩定性優於超快速模式</td>
+</tr>
+<tr>
+<td><strong>超高速模式</strong> (Ver 4.0)</td>
+<td>5 Mbps 或更高</td>
+<td>高解析度圖像傳輸，先進通信</td>
+<td>極高速率，距離有限，僅限於單向資料傳輸</td>
+</tr>
+</tbody>
+</table>
+<h2 id="i2c-實體層">I2C 實體層</h2>
+<p><img src="/images/figure_8.png" alt="I2C Physical Layer"></p>
+<h3 id="sda-和-scl-的功能">SDA 和 SCL 的功能</h3>
+<ul>
+<li>SDA (Serial Data Line)
+<ol>
+<li>負責傳輸數據（包括位址、命令和數據內容）。</li>
+<li><strong>雙向</strong>數據線：可以作為 主機到從機 或 從機到主機 的傳輸媒介。</li>
+</ol>
+</li>
+<li>SCL (Serial Clock Line)
+<ol>
+<li>生成同步時鐘信號，用於協調數據的傳輸。</li>
+<li>僅由<strong>主機</strong>生成時鐘信號，從機被動接收。</li>
+</ol>
+</li>
+</ul>
+<h3 id="特性">特性</h3>
+<ul>
+<li>雙線結構
+<ol>
+<li>I²C 僅使用 SDA 和 SCL 兩條線實現所有通信，<strong>簡化</strong>了硬體設計。</li>
+</ol>
+</li>
+<li>開漏輸出（Open-Drain 或 Open-Collector）：
+<ol>
+<li>SDA 和 SCL 均採用<strong>開漏輸出</strong>結構，線路上的電壓狀態由**外部拉高電阻（Pull-up Resistor）**維持。</li>
+<li>每個設備僅能通過拉低電平（邏輯 0）來<strong>主動</strong>控制線路，而邏輯 1 則依賴拉高電阻自動回到高電位。</li>
+</ol>
+</li>
+<li>多設備共享總線
+<ol>
+<li>所有連接到 I²C 線路的設備共享相同的 SDA 和 SCL，實現多主多從通信架構。</li>
+</ol>
+</li>
+</ul>
+<h3 id="sda-和-scl-邏輯電平">SDA 和 SCL 邏輯電平</h3>
+<table>
+    <tr>
+        <td>    </td>
+        <td>High Level</td>
+        <td>Low Level</td>
+        <td>低壓支持 </td>
+    </tr>
+    <tr>
+        <td>Fixed Input Levels </br>
+        (僅 Standard Mode 支援)</td>
+        <td> > 3.0V </td>
+        <td> < 1.5V </td>
+        <td>否 </td>
+    </tr>
+    <tr>
+        <td>VDD-related Input Levels </br>
+        ( F/S Mode, HS Mode)</td>
+        <td> > 0.7*VDD </td>
+        <td> < 0.3*VDD </td>
+        <td>是 </td>
+    </tr>
+</table>
+<h2 id="主從架構-master-slave-architecture">主從架構 Master-Slave Architecture</h2>
+<p><img src="/images/figure_9.png" alt="Master-Slave Architecture"></p>
+<p>主從式架構：主機負責生成時鐘並初始化通訊，從機被動響應。</p>
+<h3 id="主從架構">主從架構</h3>
+<ul>
+<li>Master（主機）
+<ul>
+<li>負責控制 I²C 線路上的通信流程。主機的職責包括：
+<ul>
+<li>生成時鐘信號（SCL）。</li>
+<li>發送起始條件（Start Condition）和停止條件（Stop Condition）。</li>
+<li>發起數據傳輸，選擇目標從機，並決定傳輸方向（讀/寫）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Slave（從機）
+<ul>
+<li>被動響應主機的指令。其角色包括：
+<ul>
+<li>接收位址匹配後進行數據傳輸。</li>
+<li>返回應答信號（ACK/NACK）以確認是否成功接收數據。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="多主多從支持">多主多從支持</h3>
+<p>I²C 協議支持多主多從架構（Multi-Master, Multi-Slave），但多數實際應用中只有一個主機。</p>
+<h2 id="位元傳輸">位元傳輸</h2>
+<p>位元傳輸 是 I²C 協議中最基本的數據交換單位，描述了如何在總線上以比特為單位進行數據的傳遞。</p>
+<h3 id="位元傳輸過程">位元傳輸過程：</h3>
+<ul>
+<li>數據位（Data Bit）傳輸
+<ul>
+<li>在 I²C 中，每個數據位的傳輸是在 SDA 線（數據線）上進行的，而傳輸的時序由 SCL 線（時鐘線）提供。</li>
+<li>每個數據位的傳輸過程如下
+<ol>
+<li>主機生成時鐘，通過 SCL 線產生時鐘信號，並以此為基準同步 SDA 線的數據傳輸。</li>
+<li>SDA 線上的數據變化：數據位是根據 SCL 時鐘信號的邊緣（上升或下降）來傳送的。每當 SCL 為高時，SDA 的狀態會被讀取。</li>
+<li>數據位的順序：數據位按照 MSB (Most Significant Bit) 先傳送的規則進行傳輸。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="位元傳輸的時序圖">位元傳輸的時序圖：</h3>
+<ul>
+<li>提供一個 時序圖，顯示如何在每一個 SCL 時鐘週期內傳輸一個數據位。
+<ul>
+<li>上升沿：SDA 線的變化表示數據位的開始。</li>
+<li>下降沿：SCL 線的變化同步數據位的傳送。</li>
+</ul>
+</li>
+</ul>
+<h3 id="位元的有效性與同步性">位元的有效性與同步性</h3>
+<ul>
+<li>數據位的有效性：每個數據位只有在相應的 SCL 信號的邊緣（上升或下降）才被認為是有效的。這保證了數據位的同步性和正確性。</li>
+<li>SDA 與 SCL 的同步：SDA 線的狀態變化必須在 SCL 為低時進行，並在 SCL 為高時保持穩定。這樣的設計確保了數據的準確傳輸。</li>
+</ul>
+<p><img src="/images/figure_2.png" alt="Data validity"></p>
+<h2 id="transferring-data">TRANSFERRING DATA</h2>
+<p>I²C 資料傳輸主要由 START 條件、ADDRESS BYTE、DATA BYTE、ACK/NACK 位元，以及 STOP 條件等型態組成。</p>
+<table>
+<thead>
+<tr>
+<th>信號類型</th>
+<th>由誰發出</th>
+<th>作用及說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>START</strong></td>
+<td>主機 (Master)</td>
+<td>主機開始傳輸，告訴從機通信即將開始。此信號不由 SDA 或 SCL 發送數據，而是通過 SDA 線由高到低的過渡來表示。</td>
+</tr>
+<tr>
+<td><strong>STOP</strong></td>
+<td>主機 (Master)</td>
+<td>主機結束傳輸，通知從機數據傳輸結束。此信號由 SDA 線由低到高的過渡來表示。</td>
+</tr>
+<tr>
+<td><strong>ADDRESS BYTE</strong></td>
+<td>主機 (Master)</td>
+<td>主機發送地址字節給從機，這通常包括 7 位或 10 位地址，確定通信的目標從機。</td>
+</tr>
+<tr>
+<td><strong>DATA BYTE</strong></td>
+<td>主機 (Master) 或 從機 (Slave)</td>
+<td>主機發送數據字節給從機，或者從機發送數據字節給主機。兩者都可以在通信過程中傳送數據字節。</td>
+</tr>
+<tr>
+<td><strong>ACK</strong></td>
+<td>從機 (Slave)</td>
+<td>當從機成功接收到字節並準備接收下一個字節時，從機拉低 SDA 線發送 ACK (0)。</td>
+</tr>
+<tr>
+<td><strong>NACK</strong></td>
+<td>從機 (Slave)</td>
+<td>當從機不再接收數據或在接收過程中發生錯誤時，從機保持 SDA 線為高電平發送 NACK (1)。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="備註">備註：</h4>
+<ol>
+<li><strong>START</strong> 和 <strong>STOP</strong> 信號由主機控制，主機決定何時開始或結束通信。</li>
+<li><strong>ADDRESS BYTE</strong> 和 <strong>DATA BYTE</strong> 由主機發送，但在讀取模式下，數據字節也可以由從機發送。</li>
+<li><strong>ACK</strong> 和 <strong>NACK</strong> 信號由從機發送，主機根據從機的反應來判斷是否繼續傳輸或結束。</li>
+</ol>
+<h3 id="start-與-stop-條件-start-condition--stop-condition">START 與 STOP 條件 (START Condition &amp; STOP Condition)</h3>
+<ol>
+<li>由<strong>主機</strong>產生 START 和 STOP 條件。</li>
+<li>在 <strong>START</strong> 條件發生後，總線被視為 <strong>busy</strong>。在 <strong>STOP</strong> 條件發生後的某個時間，總線被視為再次 <strong>空閒</strong>。</li>
+<li>如果產生 <strong>repeated START (Sr)</strong> 而不是 STOP 條件，總線將保持忙碌狀態。 START (S) 和 repeated START (Sr) 條件在功能上是相同的。</li>
+</ol>
+<p><img src="/images/figure_3.png" alt="START and STOP conditions"></p>
+<h3 id="byte-format">Byte format</h3>
+<ol>
+<li>SDA 線上的每個位元組必須是 <strong>8 位元</strong>長。每次傳輸可以傳輸的位元組數不受限制。每個位元組後面都必須有一個確認位。資料首先傳輸最高有效位元 (MSB)。</li>
+<li>如果從設備在執行某些其他功能（例如服務內部中斷）之前無法接收或傳輸另一個完整的資料位元組，則它可以<strong>將時脈線SCL 保持為低電平</strong>，以強制主設備進入 <strong>等待狀態</strong>。</li>
+</ol>
+<p><img src="/images/figure_10.png" alt="Byte format"></p>
+<h3 id="acknowledge-ack-and-not-acknowledge-nack">Acknowledge (ACK) and Not Acknowledge (NACK)</h3>
+<ol>
+<li>已定址的接收器必須在接收到每個位元組後產生<strong>確認(ACK)</strong>。</li>
+<li><strong>資料傳輸</strong>必須經過確認。與確認相關的時脈由主機產生。發送器釋放SDA線（HIGH）在<strong>確認時脈期間</strong>。</li>
+<li>接收器必須在應答時脈時拉低 SDA 線，以便在該時脈的高電位期間保持穩定的低電位。當然，也必須考慮設定和<strong>保持時間</strong>。</li>
+<li>當從機不確認從機位址時（例如，因正在執行某些即時功能而無法接收或傳送），從機必須將資料線保持為高電位。然後，主機可以產生一個 STOP 條件來中止傳輸，或產生一個重複的 START 條件來開始新的傳輸。</li>
+<li>如果從機接收器確實確認了從機位址，但在傳輸一段時間後無法接收更多資料位元組，則主機必須再次中止傳輸。</li>
+<li>從傳送器必須<strong>釋放資料線</strong>以允許主機產生 STOP 或 repeated START 條件。</li>
+</ol>
+<p><img src="/images/figure_4.png" alt="Acknowledge"></p>
+</div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4 layui-col-sm12 layui-col-xs12">
+            
+
+            <div class="layui-card single-card">
+                <h2 class="single-title">Recent Posts</h2>
+            
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/i2c_protocol_presentation/">
+                        <h3 class="">I2C Protocol Presentation</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/i2c_protocol_chatgpt/">
+                        <h3 class="">I2C Protocol Presentation</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/i2c_protocol/">
+                        <h3 class="">I2C Protocol Presentation</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/first/">
+                        <h3 class="">First</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-07-24</span>
+
+    
+     
+    <i class="layui-icon layui-icon-list" style="font-size: 32px; vertical-align: -3px;"></i>
+    
+
+    
+        <a href="/categories//">
+            <span class="layui-badge " style="vertical-align: 2px;"></span>
+        </a>
+    
+
+    
+    <i class="layui-icon layui-icon-tabs" style="font-size: 22px; vertical-align: 1px;margin-right:2px;"></i>
+    
+
+    
+        <a href="/tags//">
+            <span class="layui-badge " style="vertical-align: 2px;"></span>
+        </a>
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+            
+            <br />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+        </div><footer>
+    
+    
+    <div class="layui-container">
+        <p class="copyright">&copy; All rights reserved. Powered by <a href='https://gohugo.io' style='color:#FFFFFF'>Hugo</a> and <a href='https://github.com/ertuil/erblog' style='color:#FFFFFF'>Erblog</a>.</p>
+    </div>
+</footer>
+
+</body>
+</html>
