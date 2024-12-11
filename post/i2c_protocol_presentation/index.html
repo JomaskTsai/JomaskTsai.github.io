@@ -630,7 +630,7 @@ ADDRESS BYTE 以及 DATA BYTE 都是以位元組的型態表現.</p>
 </tr>
 </tbody>
 </table>
-<p><img src="/images/figure_11.png" alt="Addressing"></p>
+<p><img src="/images/figure_12.png" alt="Addressing"></p>
 <h3 id="first-byte">FIRST Byte</h3>
 <p>在 I²C 通信中，<strong>First Byte</strong> 是通信的起點，其作用是讓主機發送目標設備的地址或執行特定指令。
 而 <strong>7-bit Addressing</strong> 是 First Byte 的最基本且最常用的應用，但它同時支持其他進階功能，例如廣播、10-bit 尋址前導碼等。</p>
@@ -747,7 +747,8 @@ ADDRESS BYTE 以及 DATA BYTE 都是以位元組的型態表現.</p>
 +--------+--------+--------+--------+--------+--------+--------+--------+
 | Address (8 bits)                                                      |
 +--------+--------+--------+--------+--------+--------+--------+--------+
-</code></pre><h2 id="i2c-仲裁-arbitration-與同步-synchronization">I2C 仲裁 (Arbitration) 與同步 (Synchronization)</h2>
+</code></pre><p><img src="/images/figure_11.png" alt="Addressing"></p>
+<h2 id="i2c-仲裁-arbitration-與同步-synchronization">I2C 仲裁 (Arbitration) 與同步 (Synchronization)</h2>
 <p>在 I²C 協議中，**仲裁 (Arbitration) 和同步 (Synchronization)**是用來管理多個主控設備（Master）同時試圖控制匯流排的情況，兩者有不同的目的和機制：</p>
 <table>
 <thead>
