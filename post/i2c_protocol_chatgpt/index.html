@@ -1,0 +1,1023 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> - I2C Protocol Presentation </title>
+    
+    
+    <meta content="" name="keywords">
+    
+    <meta content=" - 你的 I²C 協議報告大綱已經涵蓋了許多關鍵概念，這裡有一些重點和建議，幫助你更清晰地表達報告內容：
+1. I²C 協定介紹  建議: 應簡要介紹 I²C 協議的歷史背景與發展，並簡述其主要用途和應用領域（如嵌入式系統、傳感器通信等）。 目的: 讓讀者快速理解 I²C 的基本概念與重要性。  2. 基於 2.1 版本的 I²C 協定概述   建議: 可以先介紹 I²C 的基本框架，然後再進入具體細節。這樣的順序更易於理解。
+  Transmission Speeds: 這部分應該清楚列出不同速率（標準模式、快速模式、超快速模式等）及其差異，並提供相應的應用場景。
+  I²C 實體層: 可以提到 I²C 線路的物理要求，例如 SCL 和 SDA 線的電壓範圍、傳輸距離限制等。
+  主從架構 Master-Slave Architecture: 這部分非常關鍵，應說明主設備和從設備的角色，並加強理解兩者間的通信流程。
+  位元傳輸: 可以詳細說明位元傳輸的過程，強調其重要性以及它如何影響整體性能。
+  傳輸資料 TRANSFERRING DATA:
+ 建議: 可以用時序圖來清楚展示 START/STOP 條件的發生，這樣對讀者來說會更加直觀。 建議: 展示 ACK/NACK 的作用和不同情況下的反應。    尋址 Addressing Scheme:" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    
+
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/self/css/default.css">
+    <script src=" /layui/layui.js"></script>
+
+    <link rel="stylesheet" async href="/self/css/markdown.min.css">
+    <link rel="stylesheet" async href="/self/css/gallery.css">
+    
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+    <script async src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys=" crossorigin="anonymous"></script></head>
+
+<body>
+    
+    <header class="layui-header layui-bg-cyan">
+
+    
+    
+    <a class="nav-self-logo" href="/">
+        
+    </a>
+
+    <ul class="layui-nav layui-layout-right layui-bg-cyan" lay-filter="">
+        
+        
+        <li class="layui-nav-item" id="nav_big"><a href="/post/">Posts</a></li>
+        
+
+        
+            
+                <li class="layui-nav-item" id="nav_big"><a href="/post/"></a></li>
+            
+        
+
+        
+        <li class="layui-nav-item" id="nav_small">
+            <a href="javascript:;">
+                <i class="layui-icon layui-icon-app" style="font-size: 24px;"></i>
+            </a>
+
+            <dl class="layui-nav-child">
+                
+                <dd><a href="/post/">Posts</a></dd>
+                
+
+                
+                    
+                        <dd><a href="/post/"></a></dd>
+                    
+                
+            </dl>
+        </li>
+    </ul>
+</header>
+
+<script>
+layui.use('element', function(){
+  var element = layui.element;
+});
+</script>
+
+        <div id="content" style="min-height:80%">
+<div class="layui-container" style="margin-bottom: 10px">
+    
+
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-md8 layui-col-sm12 layui-col-xs12">
+            <div class="layui-card single-card">
+                <br />
+                <blockquote class="self-elem-quote  markdown-body single-title" >
+                    <h1>I2C Protocol Presentation</h1>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                </blockquote>
+                <div class="layui-card-body markdown-body single-content">
+                    <p>你的 I²C 協議報告大綱已經涵蓋了許多關鍵概念，這裡有一些重點和建議，幫助你更清晰地表達報告內容：</p>
+<h3 id="1-ic-協定介紹">1. I²C 協定介紹</h3>
+<ul>
+<li><strong>建議</strong>: 應簡要介紹 I²C 協議的歷史背景與發展，並簡述其主要用途和應用領域（如嵌入式系統、傳感器通信等）。</li>
+<li><strong>目的</strong>: 讓讀者快速理解 I²C 的基本概念與重要性。</li>
+</ul>
+<h3 id="2-基於-21-版本的-ic-協定概述">2. 基於 2.1 版本的 I²C 協定概述</h3>
+<ul>
+<li>
+<p><strong>建議</strong>: 可以先介紹 I²C 的基本框架，然後再進入具體細節。這樣的順序更易於理解。</p>
+<ol>
+<li>
+<p><strong>Transmission Speeds</strong>: 這部分應該清楚列出不同速率（標準模式、快速模式、超快速模式等）及其差異，並提供相應的應用場景。</p>
+</li>
+<li>
+<p><strong>I²C 實體層</strong>: 可以提到 I²C 線路的物理要求，例如 SCL 和 SDA 線的電壓範圍、傳輸距離限制等。</p>
+</li>
+<li>
+<p><strong>主從架構 Master-Slave Architecture</strong>: 這部分非常關鍵，應說明主設備和從設備的角色，並加強理解兩者間的通信流程。</p>
+</li>
+<li>
+<p><strong>位元傳輸</strong>: 可以詳細說明位元傳輸的過程，強調其重要性以及它如何影響整體性能。</p>
+</li>
+<li>
+<p><strong>傳輸資料 TRANSFERRING DATA</strong>:</p>
+<ul>
+<li><strong>建議</strong>: 可以用時序圖來清楚展示 START/STOP 條件的發生，這樣對讀者來說會更加直觀。</li>
+<li><strong>建議</strong>: 展示 ACK/NACK 的作用和不同情況下的反應。</li>
+</ul>
+</li>
+<li>
+<p><strong>尋址 Addressing Scheme</strong>:</p>
+<ul>
+<li>7-bit 與 10-bit Addressing 都是 I²C 的核心，應詳細解釋這兩種方式的區別，並搭配時序圖來幫助理解。</li>
+</ul>
+</li>
+<li>
+<p><strong>Acknowledgement Mechanism (ACK/NACK)</strong>: 可以專門講解 ACK/NACK 機制如何支持通信的可靠性。</p>
+</li>
+<li>
+<p><strong>Arbitration and Synchronization</strong>: 這部分可以介紹多主設備時的競爭條件及其解決方法，幫助理解如何避免數據衝突。</p>
+</li>
+<li>
+<p><strong>Multi-Master Configuration</strong>: 介紹在多主架構下，如何進行設備間的協作與同步。</p>
+</li>
+<li>
+<p><strong>Error Detection and Handling</strong>: 可以介紹 I²C 中的錯誤檢測機制，如何避免或處理錯誤，提高通信可靠性。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="3-ic-protocol-challenges-and-limitations">3. I²C Protocol Challenges and Limitations</h3>
+<ul>
+<li><strong>建議</strong>: 在這一部分，強調 I²C 協議的限制，例如距離限制、速度限制、設備數量限制等。並提供具體的案例或應用場景，來說明這些挑戰對實際應用的影響。</li>
+</ul>
+<h3 id="4-ic-vs-other-communication-protocols-spiuart">4. I²C vs Other Communication Protocols (SPI/UART)</h3>
+<ul>
+<li><strong>建議</strong>: 可以從不同角度比較 I²C 與 SPI、UART 的優缺點，包括速率、連接方式、硬體成本、功耗等，幫助讀者了解何時選擇 I²C。</li>
+</ul>
+<h3 id="總結與建議">總結與建議:</h3>
+<ul>
+<li><strong>順序建議</strong>: 可以將 “I²C 協定介紹” 放在最前面，作為簡介，然後再介紹協議細節，並在報告末尾討論挑戰與比較。</li>
+<li><strong>加強視覺輔助</strong>: 加入更多的時序圖和表格，幫助讀者更好地理解通信過程和不同配置下的工作原理。</li>
+</ul>
+<p>這樣的結構應該會讓報告更加有條理、易於理解。</p>
+<p>你提到的 <strong>快速模式+ (Fast-mode Plus)</strong> 確實是 I²C 協議的一個重要更新，它在傳輸速率上介於 <strong>快速模式</strong> 和 <strong>超快速模式</strong> 之間。讓我補充這一部分：</p>
+<h3 id="快速模式-fast-mode-plus-fm">快速模式+ (Fast-mode Plus, Fm+)</h3>
+<ul>
+<li><strong>速率</strong>: 1 Mbps</li>
+<li><strong>描述</strong>: 快速模式+ 是 I²C 協議的中高速度模式，它提供比標準的 <strong>快速模式</strong> 更高的傳輸速率，並且在穩定性和距離方面表現得更好。快速模式+ 可用於需要較高數據速率但又不需要超高速的應用，且能夠在較長距離內穩定工作。</li>
+<li><strong>應用場景</strong>:
+<ul>
+<li><strong>工業自動化設備</strong>: 比如機器控制系統，這些設備需要相對較高的數據傳輸速率，同時保持系統的穩定性。</li>
+<li><strong>高效能傳感器系統</strong>: 如某些高性能的溫濕度傳感器或壓力傳感器，它們可能需要更高的數據帶寬來實現快速的數據讀取。</li>
+<li><strong>顯示技術</strong>: 如液晶顯示器（LCD）和 OLED 顯示器等，這些設備需要高效的數據傳輸。</li>
+</ul>
+</li>
+</ul>
+<h3 id="速率比較表更新後">速率比較表（更新後）</h3>
+<table>
+<thead>
+<tr>
+<th>速率模式</th>
+<th>傳輸速率</th>
+<th>應用範圍</th>
+<th>特點</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>標準模式</strong></td>
+<td>100 kbps</td>
+<td>低速嵌入式系統，低功耗設備</td>
+<td>穩定、功耗低</td>
+</tr>
+<tr>
+<td><strong>快速模式</strong></td>
+<td>400 kbps</td>
+<td>顯示器、傳感器等中等帶寬需求</td>
+<td>較高的數據速率，穩定性良好</td>
+</tr>
+<tr>
+<td><strong>快速模式+</strong></td>
+<td>1 Mbps</td>
+<td>工業控制、高效能傳感器</td>
+<td>高速傳輸，穩定性優於超快速模式</td>
+</tr>
+<tr>
+<td><strong>超快速模式</strong></td>
+<td>3.4 Mbps</td>
+<td>音頻/視頻設備，高性能設備</td>
+<td>高數據速率，範圍受限</td>
+</tr>
+<tr>
+<td><strong>超高速模式</strong></td>
+<td>5 Mbps 或更高</td>
+<td>高解析度圖像傳輸，先進通信</td>
+<td>極高速率，但範圍有限</td>
+</tr>
+</tbody>
+</table>
+<h3 id="結論">結論</h3>
+<ul>
+<li><strong>快速模式+</strong> 提供了比 <strong>快速模式</strong> 更高的數據速率，並且在距離和穩定性方面優於 <strong>超快速模式</strong>，因此它適用於需要中高速度、穩定性的應用場景，尤其是工業和高效能傳感器類的設備。</li>
+</ul>
+<p>這樣一來，<strong>快速模式+</strong> 成為 I²C 協議中一個非常實用的中速選擇，適合那些需要比快速模式更高速率但又不需要超高速的應用。</p>
+<p>以下是包含 <strong>START</strong>, <strong>STOP</strong>, <strong>DATA BYTE</strong>, <strong>ADDRESS BYTE</strong>, <strong>ACK/NACK</strong> 等信號的表格，說明每個信號是由 <strong>主機（Master）</strong> 還是 <strong>從機（Slave）</strong> 發出：</p>
+<table>
+<thead>
+<tr>
+<th>信號類型</th>
+<th>由誰發出</th>
+<th>作用及說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>START</strong></td>
+<td>主機 (Master)</td>
+<td>主機開始傳輸，告訴從機通信即將開始。此信號不由 SDA 或 SCL 發送數據，而是通過 SDA 線由高到低的過渡來表示。</td>
+</tr>
+<tr>
+<td><strong>STOP</strong></td>
+<td>主機 (Master)</td>
+<td>主機結束傳輸，通知從機數據傳輸結束。此信號由 SDA 線由低到高的過渡來表示。</td>
+</tr>
+<tr>
+<td><strong>ADDRESS BYTE</strong></td>
+<td>主機 (Master)</td>
+<td>主機發送地址字節給從機，這通常包括 7 位或 10 位地址，確定通信的目標從機。</td>
+</tr>
+<tr>
+<td><strong>DATA BYTE</strong></td>
+<td>主機 (Master) 或 從機 (Slave)</td>
+<td>主機發送數據字節給從機，或者從機發送數據字節給主機。兩者都可以在通信過程中傳送數據字節。</td>
+</tr>
+<tr>
+<td><strong>ACK</strong></td>
+<td>從機 (Slave)</td>
+<td>當從機成功接收到字節並準備接收下一個字節時，從機拉低 SDA 線發送 ACK (0)。</td>
+</tr>
+<tr>
+<td><strong>NACK</strong></td>
+<td>從機 (Slave)</td>
+<td>當從機不再接收數據或在接收過程中發生錯誤時，從機保持 SDA 線為高電平發送 NACK (1)。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="備註">備註：</h3>
+<ol>
+<li><strong>START</strong> 和 <strong>STOP</strong> 信號由主機控制，主機決定何時開始或結束通信。</li>
+<li><strong>ADDRESS BYTE</strong> 和 <strong>DATA BYTE</strong> 由主機發送，但在讀取模式下，數據字節也可以由從機發送。</li>
+<li><strong>ACK</strong> 和 <strong>NACK</strong> 信號由從機發送，主機根據從機的反應來判斷是否繼續傳輸或結束。</li>
+</ol>
+<p>這樣的表格能幫助清晰地區分不同信號的來源和其在 I²C 通信中的作用。</p>
+<p>以下是用簡單文字與圖表描述 <strong>START 與 STOP 條件</strong> 的方式：</p>
+<hr>
+<h3 id="簡單文字描述">簡單文字描述：</h3>
+<ol>
+<li><strong>START 條件 (S)</strong>：主機在資料傳輸開始時產生，標記 I²C 總線的開始。</li>
+<li><strong>STOP 條件 (P)</strong>：主機在資料傳輸結束時產生，標記 I²C 總線的結束。</li>
+<li><strong>總線狀態</strong>：
+<ul>
+<li>START 發生後，總線進入忙碌狀態。</li>
+<li>STOP 發生後，總線回到空閒狀態。</li>
+</ul>
+</li>
+<li><strong>Repeated START (Sr)</strong>：如果主機發送重複的 START，而不是 STOP，總線保持忙碌。START 和 Sr 的功能相同。</li>
+</ol>
+<hr>
+<h3 id="圖表描述">圖表描述：</h3>
+<table>
+<thead>
+<tr>
+<th>條件</th>
+<th>總線狀態變化</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>START (S)</td>
+<td>空閒 → 忙碌</td>
+<td>主機發出，標記資料傳輸的開始。</td>
+</tr>
+<tr>
+<td>STOP (P)</td>
+<td>忙碌 → 空閒</td>
+<td>主機發出，標記資料傳輸的結束，總線回到空閒。</td>
+</tr>
+<tr>
+<td>Repeated START (Sr)</td>
+<td>忙碌 → 忙碌</td>
+<td>主機發出，總線保持忙碌狀態，可連續發送資料。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="訊號波形-簡單圖示">訊號波形 (簡單圖示)：</h3>
+<pre tabindex="0"><code>START (S): SDA 從高變低 (在 SCL 高電平時)
+STOP (P): SDA 從低變高 (在 SCL 高電平時)
+Repeated START (Sr): 與 START 條件相同
+</code></pre><p><strong>波形圖：</strong></p>
+<pre tabindex="0"><code>S:        P:        Sr:  
+    |         |         |  
+SCL ____|‾‾‾‾‾‾|____   .....
+SDA ‾‾‾‾‾\______|‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+</code></pre><p>這樣的描述可以幫助理解 START 與 STOP 條件的功能與應用！</p>
+<p>以下是簡單文字與圖表的方式描述 <strong>Byte Format</strong> 的內容：</p>
+<hr>
+<h3 id="簡單文字描述-1">簡單文字描述：</h3>
+<ol>
+<li>
+<p><strong>位元組格式</strong>：</p>
+<ul>
+<li>每個位元組包含 <strong>8 位元</strong>，傳輸時不限制位元組的數量。</li>
+<li>每個位元組傳輸後，接收端需回傳 <strong>1 個確認位元 (ACK)</strong>。</li>
+<li>資料傳輸順序為 <strong>最高有效位元 (MSB)</strong> 先傳輸。</li>
+</ul>
+</li>
+<li>
+<p><strong>從設備的等待機制</strong>：</p>
+<ul>
+<li>如果從設備需要處理其他工作（例如內部中斷），可以將時脈線 (SCL) <strong>保持為低電平</strong>，迫使主設備進入等待狀態，直到從設備準備好。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="圖表描述-1">圖表描述：</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位元組長度</td>
+<td>每個位元組為 <strong>8 位元</strong>。</td>
+</tr>
+<tr>
+<td>資料傳輸順序</td>
+<td><strong>最高有效位元 (MSB)</strong> 先傳輸。</td>
+</tr>
+<tr>
+<td>確認位元 (ACK)</td>
+<td>每個位元組傳輸完成後需接收端回應 <strong>1 個 ACK 位元</strong>。</td>
+</tr>
+<tr>
+<td>等待機制</td>
+<td>從設備可透過將 <strong>SCL 保持低電平</strong> 讓主設備進入等待狀態。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="訊號波形圖-簡單圖示">訊號波形圖 (簡單圖示)：</h3>
+<ol>
+<li>
+<p><strong>位元組傳輸與確認位元 (ACK)</strong></p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|____|‾‾‾|____|‾‾‾|____|‾‾‾|____|‾‾‾|____|‾‾‾|____|‾‾‾|____|‾‾‾|_
+SDA:   MSB -&gt;    ...   -&gt; LSB   ACK
+位元：  1   0   1   1   0   1   0   0    ↓
+</code></pre><ul>
+<li>位元組傳輸後，接收端在第 9 個時鐘週期回應 <strong>ACK</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>從設備保持 SCL 為低電平的等待狀態</strong></p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|_________（保持低電平）_________|‾‾‾|_
+SDA:   傳輸中止（主設備等待從設備準備完成）
+</code></pre></li>
+</ol>
+<p>此圖文並茂的方式可清楚解釋 Byte Format 的工作流程與例外情況！</p>
+<p>以下是用簡單文字和圖表描述 <strong>Acknowledge (ACK) 和 Not Acknowledge (NACK)</strong> 的內容：</p>
+<hr>
+<h3 id="簡單文字描述-2">簡單文字描述</h3>
+<ol>
+<li>
+<p><strong>ACK（確認）</strong>：</p>
+<ul>
+<li>接收器在接收每個位元組後，需產生 <strong>ACK</strong> 信號表示成功接收資料。</li>
+<li>ACK 由接收器將 SDA 線拉低 (LOW) 並在時脈高電平期間保持穩定完成。</li>
+</ul>
+</li>
+<li>
+<p><strong>NACK（不確認）</strong>：</p>
+<ul>
+<li>若從設備無法處理傳輸（例如忙碌或不支持的從機位址），從設備需保持 SDA 線為高電平 (HIGH)。</li>
+</ul>
+</li>
+<li>
+<p><strong>主機的行為</strong>：</p>
+<ul>
+<li>當遇到 <strong>NACK</strong> 時，主機可以選擇：
+<ul>
+<li>發送 STOP 條件以中止傳輸。</li>
+<li>發送重複的 START 條件以開始新傳輸。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>時脈和 SDA 控制</strong>：</p>
+<ul>
+<li><strong>主機</strong>產生時脈信號，並在確認時釋放 SDA 線。</li>
+<li><strong>接收器</strong>負責在確認時將 SDA 線拉低，並遵守設定和保持時間的要求。</li>
+</ul>
+</li>
+<li>
+<p><strong>傳輸終止</strong>：</p>
+<ul>
+<li>若從設備無法再接收資料，主機需中止傳輸並產生 STOP 或 repeated START 條件。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="圖表描述-2">圖表描述</h3>
+<table>
+<thead>
+<tr>
+<th>條件</th>
+<th>SDA 線的狀態</th>
+<th>主機/從機行為</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACK (確認)</strong></td>
+<td>接收器將 SDA 線拉低 (LOW)</td>
+<td>表示資料成功接收，主機可繼續傳輸下一位元組。</td>
+</tr>
+<tr>
+<td><strong>NACK (不確認)</strong></td>
+<td>接收器保持 SDA 線為高 (HIGH)</td>
+<td>表示從設備忙碌或無法處理，主機需選擇中止或重新開始傳輸。</td>
+</tr>
+<tr>
+<td><strong>主機中止傳輸</strong></td>
+<td>主機控制 SDA 發送 STOP</td>
+<td>主機發出 STOP 或 repeated START，結束或重新開始傳輸。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="信號波形示例">信號波形示例</h3>
+<ol>
+<li>
+<p><strong>ACK 信號波形：</strong></p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|____|‾‾‾|____|‾‾‾|_
+SDA:       DATA       ↓ (ACK 拉低)
+</code></pre><ul>
+<li>接收器在 ACK 時鐘期間將 SDA 線拉低。</li>
+</ul>
+</li>
+<li>
+<p><strong>NACK 信號波形：</strong></p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|____|‾‾‾|____|‾‾‾|_
+SDA:       DATA       ‾‾‾ (NACK 保持高電平)
+</code></pre><ul>
+<li>接收器保持 SDA 為高電平，表示 NACK。</li>
+</ul>
+</li>
+<li>
+<p><strong>STOP 條件波形：</strong></p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|_____
+SDA:       \______‾‾‾  (SDA 從低到高)
+</code></pre></li>
+</ol>
+<hr>
+<p>Acknowledge (ACK) 和 Not Acknowledge (NACK)
+ACK（確認）：接收器的反應</p>
+<p>條件：
+接收器成功接收到位元組後，需要回應 ACK 信號。
+SDA 狀態：
+接收器在 ACK 時鐘期間將 SDA 線拉低（LOW）。
+主機行為：
+主機在傳輸位元組後釋放 SDA 線，等待接收器的 ACK。
+結果：
+主機確認接收到 ACK 後，繼續傳輸下一位元組。
+NACK（不確認）：接收器的反應</p>
+<p>條件：
+接收器無法處理傳輸，例如：
+從機位址不匹配（未被定址）。
+從機忙碌，無法接收更多資料。
+SDA 狀態：
+接收器保持 SDA 線為高電平（HIGH），表示 NACK。
+主機行為：
+主機根據 NACK 決定：
+發送 STOP 條件，結束傳輸。
+發送重複的 START 條件，重新開始新傳輸。
+時脈與 SDA 控制</p>
+<p>主機行為：
+主機負責產生所有時脈信號，包括 ACK/NACK 時鐘週期。
+在 ACK/NACK 時釋放 SDA 線，允許接收器控制其狀態（拉低或保持高電平）。
+接收器行為：
+在 ACK 時，需遵守設定和保持時間的要求，確保 SDA 信號穩定。
+傳輸終止</p>
+<p>從機反應：
+若從機暫時無法接收更多資料，會保持 SDA 線為高電平（HIGH）。
+主機行為：
+根據情況中止傳輸，並產生 STOP 條件或 repeated START 條件。
+**主從協作</p>
+<p>抱歉，我沒有提供圖表描述。以下是更新的內容，並加入了圖表描述：</p>
+<hr>
+<h3 id="acknowledge-ack-和-not-acknowledge-nack"><strong>Acknowledge (ACK) 和 Not Acknowledge (NACK)</strong></h3>
+<ol>
+<li>
+<p><strong>ACK（確認）</strong>：</p>
+<ul>
+<li><strong>條件</strong>：接收器（通常為從機）在接收到每個位元組後，必須產生 <strong>ACK 信號</strong> 表示成功接收。</li>
+<li><strong>主機的反應</strong>：主機產生時鐘信號，並釋放 SDA 線，等待接收器回應。</li>
+<li><strong>從機的反應</strong>：從機在 ACK 時針期間，將 SDA 線拉低 (LOW) 並保持穩定，表示已準備好接收下一個位元組。</li>
+</ul>
+</li>
+<li>
+<p><strong>NACK（不確認）</strong>：</p>
+<ul>
+<li><strong>條件</strong>：當從機無法處理傳輸時（例如忙碌或不支持的位址），需產生 <strong>NACK 信號</strong>。</li>
+<li><strong>主機的反應</strong>：主機檢測到 SDA 線保持高電平後，決定：
+<ul>
+<li>發送 STOP 條件以中止傳輸。</li>
+<li>發送 repeated START 條件開始新的傳輸。</li>
+</ul>
+</li>
+<li><strong>從機的反應</strong>：從機保持 SDA 線為高電平 (HIGH)，表示無法處理資料。</li>
+</ul>
+</li>
+<li>
+<p><strong>主機控制時脈信號</strong>：</p>
+<ul>
+<li>主機負責產生確認時鐘 (第 9 個時鐘週期)。</li>
+<li>在時鐘週期內，釋放 SDA 線以供從機控制。</li>
+</ul>
+</li>
+<li>
+<p><strong>從機等待狀態</strong>：</p>
+<ul>
+<li>當從機忙於執行其他操作（例如服務內部中斷）且無法接收下一個位元組時：
+<ul>
+<li><strong>從機的反應</strong>：將 SDA 保持高電平以產生 NACK。</li>
+<li><strong>主機的反應</strong>：可選擇發送 STOP 或 repeated START 條件，重新調整傳輸。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>傳輸終止</strong>：</p>
+<ul>
+<li>當從機已接收足夠資料或無法繼續時：
+<ul>
+<li><strong>主機的反應</strong>：主機需產生 STOP 條件，結束傳輸。</li>
+<li><strong>從機的反應</strong>：釋放 SDA 線，準備回到空閒狀態。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="圖表描述-3"><strong>圖表描述</strong></h3>
+<table>
+<thead>
+<tr>
+<th><strong>狀態</strong></th>
+<th><strong>SDA 線狀態</strong></th>
+<th><strong>主機反應</strong></th>
+<th><strong>從機反應</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACK（確認）</strong></td>
+<td>SDA 拉低 (LOW)</td>
+<td>產生時鐘信號，並釋放 SDA 線</td>
+<td>在時脈高電位期間將 SDA 拉低以表示確認。</td>
+</tr>
+<tr>
+<td><strong>NACK（不確認）</strong></td>
+<td>SDA 保持高電位 (HIGH)</td>
+<td>產生 STOP 或 repeated START 條件以中止或重啟傳輸。</td>
+<td>保持 SDA 為高電位，表示無法處理資料。</td>
+</tr>
+<tr>
+<td><strong>主機中止傳輸</strong></td>
+<td>SDA 從低到高 (STOP)</td>
+<td>產生 STOP 條件終止傳輸，或產生 repeated START 進行新傳輸。</td>
+<td>等待或釋放 SDA 線準備回應。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="信號波形描述"><strong>信號波形描述：</strong></h3>
+<ol>
+<li>
+<p><strong>ACK 信號波形</strong>（接收器產生 ACK）：</p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|____|‾‾‾|____|‾‾‾|_
+SDA:       DATA       ↓ (ACK 拉低)
+</code></pre><ul>
+<li>主機釋放 SDA 後，由接收器拉低 SDA 表示確認。</li>
+</ul>
+</li>
+<li>
+<p><strong>NACK 信號波形</strong>（接收器產生 NACK）：</p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|____|‾‾‾|____|‾‾‾|_
+SDA:       DATA       ‾‾‾ (NACK 保持高電平)
+</code></pre><ul>
+<li>接收器保持 SDA 為高電平，表示未確認。</li>
+</ul>
+</li>
+<li>
+<p><strong>STOP 條件波形</strong>（主機終止傳輸）：</p>
+<pre tabindex="0"><code>SCL:  ____|‾‾‾|_____
+SDA:       \______‾‾‾  (SDA 從低到高)
+</code></pre></li>
+</ol>
+<hr>
+<p>這樣的圖表描述能幫助更清楚地理解 <strong>ACK</strong> 和 <strong>NACK</strong> 的傳輸過程，以及主機和從機在這些情況下的具體反應！</p>
+<h3 id="ic-尋址設計概念"><strong>I²C 尋址設計概念</strong></h3>
+<p>I²C 尋址 (Addressing Scheme) 是為了讓主機能準確地與目標從設備通信。設計目標包括：</p>
+<ol>
+<li><strong>唯一設備標識</strong>：每個從設備需有唯一的地址，主機透過地址確定通信對象。</li>
+<li><strong>多設備支持</strong>：支援 7-bit 和 10-bit 地址模式，滿足不同設備數量需求。</li>
+<li><strong>簡化通信</strong>：使用標準化地址結構確保穩定性和兼容性。</li>
+<li><strong>讀寫指令結合</strong>：首字節(Address Byte)同時包含設備地址及讀/寫操作類型。</li>
+</ol>
+<hr>
+<h3 id="1-formats-with-7-bit-addresses"><strong>1. FORMATS WITH 7-BIT ADDRESSES</strong></h3>
+<p><strong>7 位元地址格式</strong>是 I²C 的標準模式，最多支持 128 個設備。地址被編碼為 8 位元，其中包括：</p>
+<ul>
+<li><strong>7 位元地址</strong>（0x00 至 0x7F）。</li>
+<li><strong>1 位元操作位</strong>（R/W 位），指示讀取或寫入操作。</li>
+</ul>
+<h4 id="圖表描述-4"><strong>圖表描述</strong></h4>
+<pre tabindex="0"><code>Bit 7     Bit 6    Bit 5    Bit 4    Bit 3    Bit 2    Bit 1    Bit 0  
++--------+--------+--------+--------+--------+--------+--------+--------+
+| 0      | 7-bit address (7 bits)   | R/W (1 bit)                    |
++--------+--------+--------+--------+--------+--------+--------+--------+
+</code></pre><ul>
+<li><strong>R/W 位</strong>：0 表示寫入，1 表示讀取。</li>
+</ul>
+<hr>
+<h3 id="2-7-bit-尋址"><strong>2. 7-bit 尋址</strong></h3>
+<p>在 7-bit 尋址中，通信過程基於以下步驟：</p>
+<ol>
+<li>主機發送 <strong>START 條件</strong>。</li>
+<li>主機傳送 <strong>7-bit 地址 + R/W 位</strong>，識別目標設備並指示操作類型。</li>
+<li>從設備根據地址匹配並通過 <strong>ACK 信號</strong>回應。</li>
+<li>隨後進行數據傳輸（讀取或寫入）。</li>
+</ol>
+<h4 id="列表描述"><strong>列表描述</strong></h4>
+<table>
+<thead>
+<tr>
+<th>步驟</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>START 條件</strong></td>
+<td>開始通信。</td>
+</tr>
+<tr>
+<td><strong>7-bit 地址</strong></td>
+<td>主機指定目標設備。</td>
+</tr>
+<tr>
+<td><strong>R/W 位</strong></td>
+<td>指示讀取 (1) 或寫入 (0) 操作。</td>
+</tr>
+<tr>
+<td><strong>ACK/NACK 位</strong></td>
+<td>從設備回應地址匹配結果。</td>
+</tr>
+<tr>
+<td><strong>數據傳輸</strong></td>
+<td>實際數據交換過程。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="3-first-byte-首字節"><strong>3. FIRST Byte (首字節)</strong></h3>
+<p>首字節是 I²C 資料傳輸的起點，包含：</p>
+<ul>
+<li><strong>7 位地址</strong>：唯一識別目標設備。</li>
+<li><strong>1 位 R/W 位</strong>：指定讀取或寫入操作。</li>
+</ul>
+<h4 id="圖表描述-5"><strong>圖表描述</strong></h4>
+<pre tabindex="0"><code>Bit 7     Bit 6    Bit 5    Bit 4    Bit 3    Bit 2    Bit 1    Bit 0  
++--------+--------+--------+--------+--------+--------+--------+--------+
+| 0      | 7-bit address (7 bits)   | R/W (1 bit)                    |
++--------+--------+--------+--------+--------+--------+--------+--------+
+</code></pre><hr>
+<h3 id="4-10-bit-尋址"><strong>4. 10-bit 尋址</strong></h3>
+<p>10-bit 尋址支持更多設備（1024 個）。地址結構包含 2 個位元組：</p>
+<ul>
+<li><strong>第一個位元組</strong>：前導碼 (11110) + 高 2 位元地址 + R/W 位。</li>
+<li><strong>第二個位元組</strong>：剩餘 8 位地址。</li>
+</ul>
+<h4 id="圖表描述-6"><strong>圖表描述</strong></h4>
+<p><strong>第一位元組</strong>：</p>
+<pre tabindex="0"><code>Bit 7     Bit 6    Bit 5    Bit 4    Bit 3    Bit 2    Bit 1    Bit 0  
++--------+--------+--------+--------+--------+--------+--------+--------+
+| 1      | 1      | 1      | 1      | 0      | Address (2 bits) | R/W   |
++--------+--------+--------+--------+--------+--------+--------+--------+
+</code></pre><p><strong>第二位元組</strong>：</p>
+<pre tabindex="0"><code>Bit 7     Bit 6    Bit 5    Bit 4    Bit 3    Bit 2    Bit 1    Bit 0  
++--------+--------+--------+--------+--------+--------+--------+--------+
+| Address (8 bits)                                                 |
++--------+--------+--------+--------+--------+--------+--------+--------+
+</code></pre><hr>
+<h3 id="綜合說明-總結"><strong>綜合說明 (總結)</strong></h3>
+<p>I²C 尋址方案根據設備數量與需求靈活選擇 7-bit 或 10-bit 地址模式：</p>
+<ul>
+<li><strong>7-bit 尋址</strong>：適合常規應用，簡單易用。</li>
+<li><strong>10-bit 尋址</strong>：適合需要大規模設備的系統。
+每次通信開始於 <strong>START 條件</strong>，主機透過首字節傳送目標地址與操作指令，並以 <strong>STOP 條件</strong>結束，形成完整的傳輸過程。</li>
+</ul>
+<p>以下是 I²C <strong>First Byte</strong> 中已預先定義的功能列表，涵蓋了標準通信和特殊用途的所有規範：</p>
+<table>
+<thead>
+<tr>
+<th><strong>位元 7-1</strong></th>
+<th><strong>位元 0 (R/W)</strong></th>
+<th><strong>功能</strong></th>
+<th><strong>說明</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0000 000</code></td>
+<td><code>0</code></td>
+<td><strong>General Call</strong></td>
+<td>廣播指令，所有設備接收，例如初始化或同步時鐘。</td>
+</tr>
+<tr>
+<td><code>0000 001</code></td>
+<td><code>0</code></td>
+<td><strong>START Byte</strong></td>
+<td>高速模式用於初始化通信，用於 Hs-mode。</td>
+</tr>
+<tr>
+<td><code>0000 010</code></td>
+<td><code>0</code></td>
+<td><strong>CBUS Address</strong></td>
+<td>支持 CBUS 協議的設備通信。</td>
+</tr>
+<tr>
+<td><code>0000 011</code> - <code>0000 111</code></td>
+<td><code>0</code></td>
+<td><strong>保留 (Reserved)</strong></td>
+<td>暫未定義用途，保留供未來擴展使用。</td>
+</tr>
+<tr>
+<td><code>1111 0XX</code></td>
+<td><code>0</code> 或 <code>1</code></td>
+<td><strong>10-bit Address 前導碼</strong></td>
+<td>用於 10-bit 地址通信，包含高位地址與操作類型 (讀/寫)。</td>
+</tr>
+<tr>
+<td><code>1111 100</code></td>
+<td><code>1</code></td>
+<td><strong>Device ID</strong></td>
+<td>主機讀取從設備的識別信息，例如型號或製造商等。</td>
+</tr>
+<tr>
+<td><code>其他 7-bit 地址</code></td>
+<td><code>0</code> 或 <code>1</code></td>
+<td><strong>普通設備尋址 (Normal Addressing)</strong></td>
+<td>用於標準 7-bit 地址模式下的從設備通信，識別具體設備並指定操作類型 (讀/寫)。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="說明"><strong>說明</strong></h3>
+<ol>
+<li>
+<p><strong>General Call</strong></p>
+<ul>
+<li>地址 <code>0000 000</code> 是廣播地址，用於讓所有從設備接收相同的指令，常用於系統初始化、軟件復位或同步時鐘等。</li>
+<li>從設備可根據設計選擇是否回應 General Call。</li>
+</ul>
+</li>
+<li>
+<p><strong>START Byte</strong></p>
+<ul>
+<li>地址 <code>0000 001</code> 是高速模式初始化專用的起始字節。</li>
+<li>此功能僅適用於切換到 <strong>High-Speed Mode (Hs-mode)</strong>。</li>
+</ul>
+</li>
+<li>
+<p><strong>CBUS Address</strong></p>
+<ul>
+<li>地址 <code>0000 010</code> 是為支持 CBUS 協議的設備保留，用於特定通信場景。</li>
+</ul>
+</li>
+<li>
+<p><strong>10-bit Address 前導碼</strong></p>
+<ul>
+<li>地址 <code>1111 0XX</code> 用於指示後續的 10-bit 地址格式通信，前導碼中包含高 2 位地址與讀寫方向。</li>
+</ul>
+</li>
+<li>
+<p><strong>Device ID</strong></p>
+<ul>
+<li>地址 <code>1111 100</code> 被保留用於讀取設備識別信息，這是一種診斷和系統配置的功能。</li>
+</ul>
+</li>
+<li>
+<p><strong>普通設備尋址</strong></p>
+<ul>
+<li>其餘地址用於標準的 7-bit 或 10-bit 設備尋址，支持多達 128 個（7-bit）或 1024 個（10-bit）設備。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="總結"><strong>總結</strong></h3>
+<p>First Byte 的功能設計覆蓋了多種應用場景，包括設備廣播、模式切換、高速通信和診斷識別，並為未來擴展預留了保留位元，具有靈活性和兼容性。</p>
+<p>錯誤類型	偵測機制	處理方式
+ACK/NACK 錯誤	- 檢查接收方是否返回 ACK（低電平）或 NACK（高電平）。	- 若接收到 NACK：</p>
+<ol>
+<li>終止傳輸。</li>
+<li>啟動重試機制。</li>
+<li>記錄錯誤以供分析。
+總線仲裁錯誤	- 主機監控 SDA 線在傳輸過程中的電平狀態。	- 當主機發現仲裁失敗（其他主機佔用總線），停止傳輸，等待總線空閒後重新嘗試。
+時鐘延展問題	- 主機檢測 SCL 線被拉低時間是否超過預期。	- 增加超時機制：</li>
+<li>設置最大允許延遲時間。</li>
+<li>若超時，終止通訊並重置總線。
+停止條件未發送	- 偵測 SCL 高電平時，SDA 是否從低變高。	- 發送額外的停止條件以重置總線。</li>
+</ol>
+<ul>
+<li>確保設備設計正確處理停止條件。
+訊號雜訊與串音	- 檢測訊號電平是否與預期不符。	- 採用以下硬體措施：</li>
+</ul>
+<ol>
+<li>調整拉高電阻（4.7kΩ 或 10kΩ）。</li>
+<li>增加屏蔽或使用雙絞線。</li>
+<li>加入 EMI 過濾元件（電容/電感）。
+SDA/SCL 卡住	- 檢測 SDA 或 SCL 線長時間保持低電平。	- 採用時鐘脈衝恢復：</li>
+<li>手動產生 9 個 SCL 脈衝。</li>
+<li>發送停止條件以重置總線。
+超時問題	- 設備無回應或 SCL 線被拉低超過設定時間。	- 啟用軟體超時機制，重新初始化總線或重置相關設備。
+資料損壞或丟失	- 檢查接收資料與預期資料不符。	- 實施資料重試機制。</li>
+</ol>
+<ul>
+<li>在應用層加入 CRC 校驗碼或其他完整性檢測方法。
+設備不相容問題	- 總線通訊時，設備回應異常或無法支持快速模式。	- 使用電平轉換器解決電壓差異。</li>
+<li>降低 I²C 時鐘頻率或啟用時鐘延展功能。
+設備故障或損壞	- 無法從設備獲取應答或資料。	- 加入多路復用器隔離故障設備。</li>
+<li>監控系統健康狀態並提前進行維護。</li>
+</ul>
+</div>
+            </div>
+        </div>
+
+        <div class="layui-col-md4 layui-col-sm12 layui-col-xs12">
+            
+
+            <div class="layui-card single-card">
+                <h2 class="single-title">Recent Posts</h2>
+            
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/i2c_protocol_presentation/">
+                        <h3 class="">I2C Protocol Presentation</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/i2c_protocol_chatgpt/">
+                        <h3 class="">I2C Protocol Presentation</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/i2c_protocol/">
+                        <h3 class="">I2C Protocol Presentation</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-10-03</span>
+
+    
+    
+
+    
+
+    
+
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+                <div style="margin-left: 10px;">
+                    <blockquote class="self-elem-quote " style="background-color:#FFFFFF;margin-top: 10px;">
+                    <a href="/post/first/">
+                        <h3 class="">First</h3>
+                    </a>
+                    <h3 style="margin-top:10px; margin-bottom:10px"> 
+    <i class="layui-icon layui-icon-date" style="font-size: 28px; vertical-align: -2px;"></i>
+    <span>2024-07-24</span>
+
+    
+     
+    <i class="layui-icon layui-icon-list" style="font-size: 32px; vertical-align: -3px;"></i>
+    
+
+    
+        <a href="/categories//">
+            <span class="layui-badge " style="vertical-align: 2px;"></span>
+        </a>
+    
+
+    
+    <i class="layui-icon layui-icon-tabs" style="font-size: 22px; vertical-align: 1px;margin-right:2px;"></i>
+    
+
+    
+        <a href="/tags//">
+            <span class="layui-badge " style="vertical-align: 2px;"></span>
+        </a>
+    
+    
+</h3>
+
+                    </blockquote>
+                </div>
+                
+            
+            <br />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+        </div><footer>
+    
+    
+    <div class="layui-container">
+        <p class="copyright">&copy; All rights reserved. Powered by <a href='https://gohugo.io' style='color:#FFFFFF'>Hugo</a> and <a href='https://github.com/ertuil/erblog' style='color:#FFFFFF'>Erblog</a>.</p>
+    </div>
+</footer>
+
+</body>
+</html>

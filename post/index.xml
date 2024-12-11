@@ -5,32 +5,14 @@
     <link>/post/</link>
     <description>Recent content in Posts on </description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Sun, 08 Dec 2024 13:16:00 +0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Dec 2024 13:16:00 +0800</lastBuildDate><atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>I2C Protocol Presentation</title>
       <link>/post/i2c_protocol_presentation/</link>
-      <pubDate>Sun, 08 Dec 2024 13:16:00 +0800</pubDate>
+      <pubDate>Wed, 11 Dec 2024 13:16:00 +0800</pubDate>
       
       <guid>/post/i2c_protocol_presentation/</guid>
       <description>AGENDA  I2C 協定介紹 基於2.1版本的 I2C 協定概述  傳送速率 實體層以及主從架構 位元傳輸 BIT TRANSFER 傳輸資料 TRANSFERRING DATA  START 與 STOP 條件 (START Condition &amp;amp; STOP Condition)  Repeated START 條件   位元組格式 Byte format Acknowledge (ACK) and Not Acknowledge (NACK)  ACK 機制 (ACK/NACK)     尋址 Addressing Scheme  7-bit 定址 首位元組 (FIRST Byte)  10-bit 定址     仲裁 (Arbitration) 與同步 (Synchronization) 錯誤偵測與處理機制 Error Detection and Handling   I2C Protocol Challenges and Limitations I2C 與其他通訊協議 (SPI/UART)  I2C（Inter-Integrated Circuit）協定介紹  I²C 是飛利浦半導體（現恩智浦半導體）於 1982 年推出的串行通訊協議。 設計目的是讓 MCU 能以簡單、低成本方式與其他元件（如感測器、顯示器、存儲設備等）通信。 使用兩條信號線（SDA 和 SCL）進行同步、雙向（半雙工）數據傳輸。 支持多主多從通訊，適用於嵌入式系統和電子產品的低速多元件通信。 常見應用架構：係統管理匯流排(SMBus),電源管理匯流排(PMBus),智慧型平台管理介面(IPMI),顯示器資料通道(DDC),高階電信運算架構(ATCA)  I2C 版本演進   Version 主要重點   First The 1st version of I2C protocol。   1.</description>
-    </item>
-    
-    <item>
-      <title>I2C Protocol Presentation</title>
-      <link>/post/i2c_protocol/</link>
-      <pubDate>Thu, 03 Oct 2024 16:13:37 +0800</pubDate>
-      
-      <guid>/post/i2c_protocol/</guid>
-      <description>AGENDA  I2C 協定介紹 基於2.1版本的 I2C 協定概述  I2C 傳送速率 I2C 實體層 主從架構 Master-Slave Architecture 位元傳輸 BIT TRANSFER 傳輸資料 TRANSFERRING DATA  START 與 STOP 條件 (START Condition &amp;amp; STOP Condition)  Repeated START 條件   位元組格式 Byte format Acknowledge (ACK) and Not Acknowledge (NACK)  ACK 機制 (ACK/NACK)     尋址 Addressing Scheme  7-bit 定址 首位元組 (FIRST Byte) 10-bit 定址   仲裁 (Arbitration) 與同步 (Synchronization) 錯誤偵測與處理機制 Error Detection and Handling   I2C Protocol Challenges and Limitations I2C vs Other Communication Protocols (SPI/UART)  I2C 協定介紹 I²C（Inter-Integrated Circuit）是一種由飛利浦半導體（現為恩智浦半導體 NXP Semiconductors）於1982 年發布的串行通訊協議。I²C協議的主要制定者是飛利浦，目前則由恩智浦負責維護。該協議最初設計的目的是讓微控制器（MCU）可以簡單且低成本地與其他元件（如傳感器、顯示器和存儲設備等）進行通信。</description>
-    </item>
-    
-    <item>
-      <title>First</title>
-      <link>/post/first/</link>
-      <pubDate>Wed, 24 Jul 2024 18:10:00 +0800</pubDate>
-      
-      <guid>/post/first/</guid>
-      <description></description>
     </item>
     
   </channel>
